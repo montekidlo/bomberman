@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Move pet</title>
+	<link rel="stylesheet" href="./style.css">
+	<script src="./jquery.js"> </script>
+</head>
+<body>
+	<div id="obj">Use WASD keys to move your pet</div>
+
+<script>
+
+(function(){
+	var pet = {
+		pet: $('#obj'),
+
+		config: {
+			'speed': 1,
+			'step': 25
+		},
+
+		init: function(config) {
+			self = this;
+			$.extend(self.config, config);
+
+			self.handleMove();
+		},
+		handleMove: function() {
+			$(document).on('keypress', function(e) {
+				if(e.keyCode == 119 || e.keyCode == 1094) {
+					self.move('top');
+				} else if (e.keyCode == 97 || e.keyCode == 1092){
+					self.move('left');
+				} else if (e.keyCode == 115 || e.keyCode == 1099){
+					self.move('bottom');
+				} else if (e.keyCode == 100 || e.keyCode == 1074){
+					self.move('right');
+				}
+			});
+		},
+		move: function(direction) {
+			self._changePic(direction);
+			self._move(self._getCssByDirection(direction));
+		},
+		_getCssByDirection: function(direction) {
+			switch(direction) {
+				case 'top':
+					return {'top': '-=' + self.config.step};
+				case 'bottom':
+					return {'top': '+=' + self.config.step};
+				case 'left':
+					return {'left': '-=' + self.config.step};
+				case 'right':
+					return {'left': '+=' + self.config.step};
+				default:
+					console.log('Alarme! Unknown direction!');
+					break;
+			}
+		},
+		_changePic: function(direction) {
+			self.pet.html('<img src="./pic/move-' + direction + '.png" />');
+		},
+		_move: function(css) {
+			self.pet.animate(css, {duration: self.config.speed, queue: true}, 'linear');
+		}
+	};
+
+	pet.init();
+})()
+
+</script>
+</body>
+</html>
